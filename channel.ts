@@ -11,6 +11,8 @@ import events from "events";
 export class AGIChannel extends events.EventEmitter {
   private _socket!: net.Socket;
   public remoteServer: string | false;
+	public networkARGS: Object;
+	public networkScript?: string = "";
   public channel?: string = "";
   public language?: string = "en";
   public uniqueid?: string = "";
@@ -34,6 +36,8 @@ export class AGIChannel extends events.EventEmitter {
   constructor(props: {
     socket: net.Socket;
     remoteServer: string | false;
+		networkARGS: Object;
+		network_script?: string;
     channel?: string;
     language?: string;
     uniqueid?: string;
@@ -56,6 +60,8 @@ export class AGIChannel extends events.EventEmitter {
     super();
     this._socket = props.socket;
     this.remoteServer = props.remoteServer;
+		this.networkARGS = props.networkARGS;
+		this.networkScript = props?.network_script || "";
     this.channel = props.channel || "";
     this.language = props?.language || "en";
     this.uniqueid = props?.uniqueid || "";

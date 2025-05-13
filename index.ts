@@ -50,6 +50,17 @@ class AGIServer extends events.EventEmitter {
                 return acc;
               }, {});
 
+						// Network ARGS
+						const networkARGS = Object.keys(agiVariables).reduce((acc, key) => {
+							if(key.includes("arg_")) {
+								return {
+										...acc,
+										[key]: agiVariables[key]
+								}
+							}
+							return acc;
+						}, {});
+
             // Hangup detection
             socket.on("data", async (data) => {
               if (data.toString().includes("HANGUP")) {
@@ -60,6 +71,7 @@ class AGIServer extends events.EventEmitter {
 
             const call = new AGIChannel({
               ...agiVariables,
+							networkARGS,
               remoteServer,
               socket,
             });

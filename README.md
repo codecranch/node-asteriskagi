@@ -29,7 +29,7 @@ import AGIServer from "asteriskagi";
 const agi = new AGIServer(/* {port: 4573} */); // Server (optional port, default: 4573)
 
 agi.on("call", async (call) => {
-  const { remoteServer, uniqueid, context, extension, priority, calleridname, callerid, channel } = call;
+  const { remoteServer, networkARGS, networkScript, uniqueid, context, extension, priority, calleridname, callerid, channel } = call;
 
   call.on("hangup", () => {
     console.log(`Hangup  ${remoteServer}/${channel}`);
