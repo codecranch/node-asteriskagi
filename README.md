@@ -49,7 +49,7 @@ agi.on("call", async (call) => {
 In Asterisk dialplan (assuming the Node server is running on the same machine):
 
 ```
-exten => 1234,1,AGI(agi://localhost:4573)
+exten => 1234,1,AGI(agi://localhost:4573/script,arg_1,arg_2,arg_3)
 ```
 
 ## Commands

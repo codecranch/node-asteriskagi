@@ -11,8 +11,8 @@ import events from "events";
 export class AGIChannel extends events.EventEmitter {
   private _socket!: net.Socket;
   public remoteServer: string | false;
-	public networkARGS: Object;
-	public networkScript?: string = "";
+  public networkARGS: Object;
+  public networkScript?: string = "";
   public channel?: string = "";
   public language?: string = "en";
   public uniqueid?: string = "";
@@ -36,8 +36,8 @@ export class AGIChannel extends events.EventEmitter {
   constructor(props: {
     socket: net.Socket;
     remoteServer: string | false;
-		networkARGS: Object;
-		network_script?: string;
+    networkARGS: Object;
+    network_script?: string;
     channel?: string;
     language?: string;
     uniqueid?: string;
@@ -60,8 +60,8 @@ export class AGIChannel extends events.EventEmitter {
     super();
     this._socket = props.socket;
     this.remoteServer = props.remoteServer;
-		this.networkARGS = props.networkARGS;
-		this.networkScript = props?.network_script || "";
+    this.networkARGS = props.networkARGS;
+    this.networkScript = props?.network_script || "";
     this.channel = props.channel || "";
     this.language = props?.language || "en";
     this.uniqueid = props?.uniqueid || "";
@@ -265,7 +265,7 @@ export class AGIChannel extends events.EventEmitter {
   /**
    * Answer Channel
    */
-  async Answer() {
+  async Answer () {
     return await this.send("ANSWER");
   }
 
@@ -274,7 +274,7 @@ export class AGIChannel extends events.EventEmitter {
    * @param {string} command
    * @param {string|undefined} args
    */
-  async Exec(command: string, args: string | undefined) {
+  async Exec (command: string, args: string | undefined) {
     try {
       this.currently = command;
       await this.send(`EXEC ${command} ${args}`);
@@ -290,7 +290,7 @@ export class AGIChannel extends events.EventEmitter {
    * @param {string} variable
    * @returns
    */
-  async getVariable(variable: string) {
+  async getVariable (variable: string) {
     try {
       return await this.send("GET VARIABLE " + variable);
     } catch (err) {
@@ -302,7 +302,7 @@ export class AGIChannel extends events.EventEmitter {
   /**
    * Hang up channel
    */
-  async Hangup() {
+  async Hangup () {
     await this.send("HANGUP");
   }
 
@@ -310,7 +310,7 @@ export class AGIChannel extends events.EventEmitter {
    * Do Nothing (No Operation)
    * @param {string} args - text
    */
-  async NoOp(args: string) {
+  async NoOp (args: string) {
     return await this.send(`NOOP ${args}`);
   }
 
@@ -318,7 +318,7 @@ export class AGIChannel extends events.EventEmitter {
    * Sends audio file on channel.
    * @param {string} filename
    */
-  async Playback(filename: string) {
+  async Playback (filename: string) {
     try {
       this.currently = "Playback";
       await this.send("STREAM FILE " + filename + ' ""');
@@ -334,7 +334,7 @@ export class AGIChannel extends events.EventEmitter {
    * Send FastAGI command to specified socket
    * @param {string} command
    */
-  async send(command: string) {
+  async send (command: string) {
     return new Promise((resolve, reject) => {
       try {
         this._socket.once("data", (data) => {
@@ -371,8 +371,15 @@ export class AGIChannel extends events.EventEmitter {
    * Verbose log line
    * @param args - Text to log
    */
-  async Verbose(args: string) {
+  async Verbose (args: string) {
     return await this.send(`VERBOSE ${args}`);
+  }
+
+  /**
+   * End
+   */
+  end () {
+    this._socket && this._socket.end();
   }
 
   /**
@@ -380,7 +387,7 @@ export class AGIChannel extends events.EventEmitter {
    * @param {string} str
    * @returns object - Response code,result,data
    */
-  _parseResponse(str: string) {
+  _parseResponse (str: string) {
     try {
       let match = str.match(/(\d+)\s+result=(-?\d+)(?:\s+(.*))?/);
       if (match) {
@@ -393,10 +400,10 @@ export class AGIChannel extends events.EventEmitter {
       match = str.match(/(\d+)-(.*)/);
       return match
         ? {
-            code: match[1],
-            result: 0,
-            data: match[2],
-          }
+          code: match[1],
+          result: 0,
+          data: match[2],
+        }
         : { code: "", result: "", data: str };
     } catch (err) {
       return { code: "", result: "", data: str };

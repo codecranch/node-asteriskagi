@@ -26,7 +26,7 @@ class AGIServer extends events.EventEmitter {
   /**
    * Bind ports+listeners and signal ready.
    */
-  _bind() {
+  _bind () {
     try {
       this.fAGI = net.createServer((socket) => {
         const remoteServer: string | false = socket?.remoteAddress
@@ -50,16 +50,16 @@ class AGIServer extends events.EventEmitter {
                 return acc;
               }, {});
 
-						// Network ARGS
-						const networkARGS = Object.keys(agiVariables).reduce((acc, key) => {
-							if(key.includes("arg_")) {
-								return {
-										...acc,
-										[key]: agiVariables[key]
-								}
-							}
-							return acc;
-						}, {});
+            // Network ARGS
+            const networkARGS = Object.keys(agiVariables).reduce((acc, key) => {
+              if (key.includes("arg_")) {
+                return {
+                  ...acc,
+                  [key]: agiVariables[key]
+                }
+              }
+              return acc;
+            }, {});
 
             // Hangup detection
             socket.on("data", async (data) => {
@@ -71,7 +71,7 @@ class AGIServer extends events.EventEmitter {
 
             const call = new AGIChannel({
               ...agiVariables,
-							networkARGS,
+              networkARGS,
               remoteServer,
               socket,
             });
